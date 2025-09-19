@@ -2,80 +2,59 @@ package com.shashi.utility;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
 public class DBUtil {
-	private static Connection conn;
+    private static Connection conn;
 
-	public DBUtil() {
-	}
+    public static Connection provideConnection() {
+        try {
+            if (conn == null || conn.isClosed()) {
+                // Load the MySQL driver
+                Class.forName("com.mysql.cj.jdbc.Driver");
 
-	public static Connection provideConnection() {
+                // Create the connection and assign to static variable
+                conn = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/shopping-cart?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC",
+                    "root",
+                    "StrongP@ssw0rd!2"
+                );
+                System.out.println("Database connected successfully!");
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("MySQL Driver not found!", e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to connect to DB!", e);
+        }
 
-		try {
-			if (conn == null || conn.isClosed()) {
-				ResourceBundle rb = ResourceBundle.getBundle("application");
-				String connectionString = rb.getString("db.connectionString");
-				String driverName = rb.getString("db.driverName");
-				String username = rb.getString("db.username");
-				String password = rb.getString("db.password");
-				try {
-					Class.forName(driverName);
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				}
-				conn = DriverManager.getConnection(connectionString, username, password);
+        return conn;
+    }
 
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    public static void closeConnection(Connection con) {
+        try {
+            if (con != null && !con.isClosed()) {
+                con.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-		return conn;
-	}
+    public static void closeConnection(ResultSet rs) {
+        try {
+            if (rs != null && !rs.isClosed()) rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public static void closeConnection(Connection con) {
-		/*
-		 * try { if (con != null && !con.isClosed()) {
-		 * 
-		 * con.close(); } } catch (SQLException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 */
-	}
-
-	public static void closeConnection(ResultSet rs) {
-		try {
-			if (rs != null && !rs.isClosed()) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public static void closeConnection(PreparedStatement ps) {
-		try {
-			if (ps != null && !ps.isClosed()) {
-				try {
-					ps.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    public static void closeConnection(PreparedStatement ps) {
+        try {
+            if (ps != null && !ps.isClosed()) ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
