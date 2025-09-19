@@ -8,9 +8,9 @@ hooks:
   BeforeInstall:
     - location: scripts/stop_tomcat.sh
       timeout: 30
-      runas: Adminstrator
+      runas: ec2-user
 
   AfterInstall:
     - location: scripts/start_tomcat.sh
       timeout: 30
-      runas: Adminstrator
+      runas: ec2-user
