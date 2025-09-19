@@ -1,0 +1,16 @@
+version: 0.0
+os: linux
+files:
+  - source: target/shopping-cart-0.war
+    destination: /opt/tomcat9/webapps/
+
+hooks:
+  BeforeInstall:
+    - location: scripts/stop_tomcat.sh
+      timeout: 30
+      runas: ec2-user
+
+  AfterInstall:
+    - location: scripts/start_tomcat.sh
+      timeout: 30
+      runas: ec2-user
