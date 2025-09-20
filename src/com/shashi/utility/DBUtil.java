@@ -17,9 +17,9 @@ public class DBUtil {
 
                 // Create the connection and assign to static variable
                 conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/shopping-cart?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC",
-                    "root",
-                    "StrongP@ssw0rd!2"
+                    "jdbc:mysql://shopping-cart-0.cp684s2gerji.ap-south-1.rds.amazonaws.com/shopping-cart?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC",
+                    "admin",
+                    "TBfOunPHcsMuefSpk7P6"
                 );
                 System.out.println("Database connected successfully!");
             }
